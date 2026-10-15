@@ -1,0 +1,9 @@
+[project]
+name = "agentfence"
+version = "0.1.0"
+description = "Local Zero Trust gateway for LLM agent tool invocation"
+requires-python = ">=3.11"
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"

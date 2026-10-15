@@ -1,0 +1,58 @@
+services:
+  gateway:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      AGENTFENCE_TOKEN_HASHES: /run/secrets/token-hashes
+      AGENTFENCE_DB: /app/runtime/state/agentfence.sqlite3
+    secrets:
+      - token-hashes
+    volumes:
+      - gateway-state:/app/runtime/state
+    networks:
+      - gateway-only
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    cpus: 1.0
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  demo-agent:
+    image: python:3.12-slim
+    profiles: ["demo"]
+    depends_on:
+      gateway:
+        condition: service_healthy
+    command: ["python", "/demo/replay.py"]
+    user: "10002:10002"
+    environment:
+      AGENTFENCE_URL: http://gateway:8000
+      AGENTFENCE_TOKEN: ${AGENTFENCE_TOKEN:-}
+    volumes:
+      - ./demo:/demo:ro
+    networks:
+      - gateway-only
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 128m
+    cpus: 0.5
+secrets:
+  token-hashes:
+    file: ./runtime/token-hashes.json
+volumes:
+  gateway-state:
+networks:
+  gateway-only:
+    internal: true
