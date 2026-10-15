@@ -103,3 +103,13 @@ The Dockerfiles allow a 180-second socket timeout and ten connection retries for
 package installation. If PyPI downloads still time out, check the connection and rerun
 `docker compose build gateway`, then `docker compose up -d gateway`. Existing successful
 build layers can be reused. The pip update notice is informational.
+
+The gateway image now installs `requirements-runtime.txt`; pytest and its helper
+packages are kept in `requirements.txt` for development only. BuildKit cache mounts
+preserve successfully cached downloads across rebuild attempts. Pip 26.2.1 adds
+explicit incomplete-download retries; the bootstrap upgrade still needs network access.
+These changes improve recovery, but cannot repair a stalled network connection.
+If timeouts persist, try a different connection (for example a mobile hotspot) and
+restart Docker Desktop before retrying. Do not clear the build cache or disable TLS.
+Run only the build first. Once it succeeds, start with `docker compose up --no-build -d gateway`
+so a failed build is not immediately repeated by the start command.
