@@ -48,11 +48,31 @@ services:
       - no-new-privileges:true
     mem_limit: 128m
     cpus: 0.5
+  llm-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    profiles: ["llm"]
+    depends_on:
+      gateway:
+        condition: service_healthy
+    environment:
+      AGENTFENCE_URL: http://gateway:8000
+      AGENTFENCE_TOKEN: ${AGENTFENCE_TOKEN:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+    networks: [gateway-only, model-egress]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 192m
+    cpus: 0.5
 secrets:
   token-hashes:
     file: ./runtime/token-hashes.json
 volumes:
   gateway-state:
 networks:
+  model-egress: {}
   gateway-only:
     internal: true

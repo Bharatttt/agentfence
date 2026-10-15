@@ -62,3 +62,10 @@ The committed evaluation uses 14 original synthetic proposal fixtures, repeated 
 - [Progress and remaining work](docs/STATUS.md)
 
 Only simulated resources are used. The system reduces tool-execution risk within its configured boundaries and does not eliminate prompt injection. Secrets and local runtime files are excluded through `.gitignore` and `.dockerignore`.
+
+## OpenAI agent integration
+
+The next milestone adds a bounded model client with gateway-only execution and an
+isolated Docker profile. See [agent setup and limitations](docs/AGENT.md). Provider calls
+require locally configured credentials and an explicit model; no paid calls have been
+performed. Run `python -m pytest` for offline integration coverage.

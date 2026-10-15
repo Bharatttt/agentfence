@@ -60,3 +60,10 @@ Host administrators, reviewer credential compromise, malicious gateway code, SQL
 - `app.py`: authenticated HTTP API, protocol limits and local UI delivery.
 - `tests/`: control behavior and failure-mode tests.
 - `evaluation/`: offline baseline and synthetic replay harness, excluded from runtime image.
+
+## Remote model client
+
+See [AGENT.md](AGENT.md) for the bounded OpenAI client. Model proposals go through the
+same HTTP gateway and stop at denial or approval. The dedicated client image contains
+no protected tool code or data volume. Provider egress is available only on the client;
+this is application-controlled traffic, not an OS destination allowlist.
