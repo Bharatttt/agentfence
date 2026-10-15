@@ -66,3 +66,9 @@ and parallel proposals, repeated calls, turn budget, reviewer misuse and wrong-t
 These establish integration behavior, not live model accuracy or resistance statistics.
 Live provider and Windows Docker tests remain pending. Existing synthetic evaluation
 results are unchanged and must not be described as live LLM results.
+
+## Preferred Gemini provider
+
+The owner selected Gemini after this integration was added. Use [GEMINI.md](GEMINI.md)
+for local credentials and the `gemini-agent` Docker profile. The OpenAI client remains
+optional; an OpenAI API key is not needed to use Gemini.

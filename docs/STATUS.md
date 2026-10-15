@@ -16,8 +16,8 @@
 ## Not yet complete
 
 - [ ] Target Windows Docker build, runtime and isolation checks.
-- [x] Bounded OpenAI Responses client with gateway-only proposals and offline integration tests.
-- [ ] Live OpenAI verification with an explicitly selected model and locally configured key.
+- [x] Bounded OpenAI client and Gemini compatibility adapter with gateway-only proposals and offline integration tests.
+- [ ] Live Gemini verification (preferred provider) with an explicitly selected model and locally configured key; optional OpenAI verification.
 - [ ] Vector retrieval and full end-to-end RAG agent loop.
 - [ ] OPA/Rego integration from synopsis diagrams, if retained after scope review.
 - [ ] Correct and independently verify bibliography/novelty statements.
@@ -30,7 +30,7 @@ The gateway foundation and offline-tested model integration are implemented. It 
 
 ## Verification completed in development
 
-- 50 automated tests passed, including verifier-hash authentication checks and 14 agent integration cases.
+- 62 automated tests passed, including verifier-hash checks, shared agent integration and Gemini adapter cases.
 - Real HTTP server/client smoke test passed: authorized metadata read allowed; parameter smuggling, restricted document access and poisoned output denied.
 - Foundation Ruff lint/format and dependency consistency checks passed. Ruff crashed during the integration milestone; new client syntax and behavior were checked through Python tests.
 - JavaScript syntax check passed. Visual browser testing remains pending because the Chromium download failed in this environment.

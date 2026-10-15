@@ -4,7 +4,7 @@
 
 AgentFence checks structured tool requests before execution using typed validation, role and task permissions, scope checks, heuristic risk signals, approval for sensitive actions, and SQLite audit records.
 
-**Status: milestone 1, a working mock-tool gateway.** The console, HTTP replay client, approval lifecycle, and synthetic evaluation work. A live LLM agent, vector RAG, OPA integration, and target-machine Docker verification remain pending. This is a local research prototype, not a production security product.
+**Status: working mock-tool gateway with offline-tested OpenAI and Gemini agent clients.** The console, HTTP replay client, approval lifecycle, and synthetic evaluation work. Live provider verification, vector RAG, OPA integration, and target-machine Docker verification remain pending. This is a local research prototype, not a production security product.
 
 ## Start on Windows (PowerShell)
 
@@ -69,3 +69,11 @@ The next milestone adds a bounded model client with gateway-only execution and a
 isolated Docker profile. See [agent setup and limitations](docs/AGENT.md). Provider calls
 require locally configured credentials and an explicit model; no paid calls have been
 performed. Run `python -m pytest` for offline integration coverage.
+
+## Gemini agent (preferred provider)
+
+Follow the [Windows Gemini setup guide](docs/GEMINI.md). Start on a free-tier project;
+configure your key locally and choose a model available to your account. The isolated
+`gemini-agent` profile uses the same gateway-only execution and approval pause as the
+OpenAI client. Provider access has been tested with simulated responses; live Gemini
+verification is pending.

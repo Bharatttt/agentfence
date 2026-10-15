@@ -67,6 +67,25 @@ services:
     security_opt: ["no-new-privileges:true"]
     mem_limit: 192m
     cpus: 0.5
+  gemini-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.gemini
+    profiles: ["gemini"]
+    depends_on:
+      gateway:
+        condition: service_healthy
+    environment:
+      AGENTFENCE_URL: http://gateway:8000
+      AGENTFENCE_TOKEN: ${AGENTFENCE_TOKEN:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-}
+    networks: [gateway-only, model-egress]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 192m
+    cpus: 0.5
 secrets:
   token-hashes:
     file: ./runtime/token-hashes.json
