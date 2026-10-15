@@ -1,7 +1,7 @@
 FROM python:3.12-slim
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home agentfence
+RUN pip install --no-cache-dir --timeout 180 --retries 10 --disable-pip-version-check -r requirements.txt && useradd --uid 10001 --create-home agentfence
 COPY agentfence ./agentfence
 RUN mkdir -p /app/runtime/state && chown -R 10001:10001 /app/runtime
 USER 10001:10001

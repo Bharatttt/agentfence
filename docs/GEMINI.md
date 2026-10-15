@@ -96,3 +96,10 @@ alone does not provide OS isolation. A compromised host/runtime is outside the c
 
 Live Gemini and Windows Docker checks still require the owner's machine. No Gemini
 key has been received or used in development, and no live results are claimed.
+
+### Package download timeout during Docker build
+
+The Dockerfiles allow a 180-second socket timeout and ten connection retries for
+package installation. If PyPI downloads still time out, check the connection and rerun
+`docker compose build gateway`, then `docker compose up -d gateway`. Existing successful
+build layers can be reused. The pip update notice is informational.
