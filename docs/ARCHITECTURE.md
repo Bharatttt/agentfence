@@ -65,5 +65,16 @@ Host administrators, reviewer credential compromise, malicious gateway code, SQL
 
 See [AGENT.md](AGENT.md) for the bounded OpenAI client. Model proposals go through the
 same HTTP gateway and stop at denial or approval. The dedicated client image contains
-no protected tool code or data volume. Provider egress is available only on the client;
+no protected tool code or data volume. Provider egress is available on the model client; the gateway also has outbound
+connectivity through its host-access bridge.
 this is application-controlled traffic, not an OS destination allowlist.
+
+## Host port publishing
+
+The gateway joins `gateway-only` (internal) and `host-access` (ordinary bridge).
+Docker can leave configured ports unpublished for an internal-only container; the
+second network permits the explicit `127.0.0.1:8000:8000` binding. Model clients do not
+join `host-access`. This grants outbound networking to the trusted gateway; do not
+claim it is network-isolated from the internet. Tool destination policy, task/role
+checks and protected-volume isolation continue to enforce the execution boundary.
+The gateway has no arbitrary URL-fetch or forwarding endpoint.

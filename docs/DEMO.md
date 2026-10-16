@@ -43,3 +43,21 @@ Capture the actual terminal outputs for the review. A passing test proves these 
 ## Next model integration decision
 
 For an 8 GB laptop, a remote model API can keep local memory low, but requires a chosen provider and potentially paid usage. No provider is selected and no API calls are made in milestone 1. Alternatively, test a small local model later with measured memory limits. Approval must remain in the gateway regardless of model choice.
+
+## Missing host port mapping
+
+If the app starts but `docker compose port gateway 8000` reports `:0`, update the
+checkout and recreate the gateway with the corrected two-network configuration:
+
+```powershell
+git pull --ff-only
+docker compose up --no-build -d --force-recreate gateway
+docker compose port gateway 8000
+Invoke-RestMethod http://127.0.0.1:8000/health
+```
+
+Expected binding: `127.0.0.1:8000`. The named state volume and credentials are
+preserved. No image rebuild is needed. The gateway now has outbound connectivity;
+the scripted demo client remains on the internal network.
+
+Background: https://github.com/moby/moby/issues/44986

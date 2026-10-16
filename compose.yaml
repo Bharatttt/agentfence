@@ -12,6 +12,7 @@ services:
       - gateway-state:/app/runtime/state
     networks:
       - gateway-only
+      - host-access
     read_only: true
     tmpfs:
       - /tmp:size=16m
@@ -92,6 +93,7 @@ secrets:
 volumes:
   gateway-state:
 networks:
+  host-access: {}
   model-egress: {}
   gateway-only:
     internal: true
