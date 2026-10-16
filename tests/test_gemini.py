@@ -104,3 +104,32 @@ def test_quota_failure_no_retry():
                 'instructions': 'test', 'input': [], 'model': 'offline', 'max_output_tokens': 1024,
                 'tools': [{'name': 'propose_tool', 'description': 'test', 'parameters': {}}]})
     assert len(count) == 1
+
+
+@pytest.mark.parametrize('host,path,stage', [
+    ('generativelanguage.googleapis.com', '/v1beta/openai/chat/completions', 'Gemini model request 2'),
+    ('gateway', '/api/me', 'AgentFence authentication'),
+    ('gateway', '/api/calls', 'AgentFence tool submission'),
+])
+def test_http_diagnostic_identifies_stage_without_secrets(host, path, stage):
+    from demo.gemini_agent import describe_http_error
+    request = httpx.Request('POST', 'https://' + host + path + '?secret=private-query',
+                            headers={'Authorization': 'Bearer private-token'})
+    response = httpx.Response(503, request=request, json={'error': {
+        'status': 'UNAVAILABLE', 'message': 'private-response-body'}})
+    error = httpx.HTTPStatusError('private-exception-message', request=request, response=response)
+    message = describe_http_error(error, 2)
+    assert stage in message
+    assert 'HTTP 503' in message
+    assert 'private-' not in message
+    assert 'earlier tool calls may have executed' in message
+
+
+@pytest.mark.parametrize('body', [b'not-json-private', b'{"error":null}',
+    b'{"error":{"status":"private-untrusted-status"}}'])
+def test_http_diagnostic_ignores_untrusted_error_content(body):
+    from demo.gemini_agent import describe_http_error
+    request = httpx.Request('POST', 'https://generativelanguage.googleapis.com/')
+    response = httpx.Response(503, request=request, content=body)
+    error = httpx.HTTPStatusError('ignored', request=request, response=response)
+    assert 'private' not in describe_http_error(error, 1)

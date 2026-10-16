@@ -113,3 +113,30 @@ If timeouts persist, try a different connection (for example a mobile hotspot) a
 restart Docker Desktop before retrying. Do not clear the build cache or disable TLS.
 Run only the build first. Once it succeeds, start with `docker compose up --no-build -d gateway`
 so a failed build is not immediately repeated by the start command.
+
+### Live setup observations (2026-10-16)
+
+On the owner's Windows Docker setup, model listing and model metadata succeeded for
+`gemini-2.5-flash-lite`, but generation returned 404 with Google's explanation that
+this model is no longer available to new users. Listing does not prove generation
+access. Google recommended `gemini-3.5-flash-lite`; a direct compatibility-endpoint
+request to that model returned a greeting. Agent runs still returned HTTP 503.
+This verifies a basic provider request, not a successful integrated agent run.
+
+The client now labels HTTP errors by service and operation. Gemini errors include
+which model request failed and an allowlisted provider status enum, if present.
+Remote error messages, URLs, headers and credentials are not printed. A later
+model request can fail after an earlier gateway action succeeds; inspect dashboard
+requests before rerunning. No automatic retry or policy change is introduced.
+
+After pulling this update, rebuild only the client:
+
+```powershell
+git pull --ff-only
+docker compose --profile gemini build gemini-agent
+docker compose --profile gemini run --rm gemini-agent --prompt "Read metadata for asset-1."
+```
+
+Keep the same PowerShell session to preserve local credentials and model selection.
+`docker compose run` does not accept `--no-build` on the owner's installed version;
+omit that option. These diagnostic runs use only synthetic data.
