@@ -64,8 +64,8 @@ SQLite store and policies: valid result round-trip, cross-scope access, unknown 
 argument smuggling, malicious tool output, unauthorized export, approval pause, malformed
 and parallel proposals, repeated calls, turn budget, reviewer misuse and wrong-task rejection.
 These establish integration behavior, not live model accuracy or resistance statistics.
-Live provider and Windows Docker tests remain pending. Existing synthetic evaluation
-results are unchanged and must not be described as live LLM results.
+End-to-end live provider and Windows Docker isolation checks remain pending.
+Formal evaluation is outside the current three-objective scope and deferred to next semester.
 
 ## Preferred Gemini provider
 

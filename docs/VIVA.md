@@ -22,6 +22,6 @@
 
 **Have you solved prompt injection?** No. Heuristics can miss rephrased attacks and flag benign quotations. Deterministic authorization still constrains an agent even when suspicious text is not recognized, within the permissions actually configured.
 
-**What have you measured?** Synthetic tool-call replay against a deliberately unguarded mock baseline, with explicit sample counts, false positives, approval frequency, and local processing latency. Not a live-LLM attack-success rate or an official benchmark score.
+**How do you verify the three objectives?** Functional tests and controlled demonstrations verify gateway mediation, validation and permission rejection, and exact-action approval with audit records. Formal security and performance evaluation is deferred to next semester; it is not a deliverable in this version.
 
-**What remains?** Live model orchestration, richer retrieval, wider independently labeled evaluations, OPA if retained, and Windows Docker isolation verification.
+**What remains?** Complete the live Gemini workflow and Windows Docker isolation verification for the current objectives. Richer retrieval and OPA require scope review; formal evaluation belongs to next semester.

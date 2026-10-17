@@ -4,7 +4,7 @@
 
 AgentFence checks structured tool requests before execution using typed validation, role and task permissions, scope checks, heuristic risk signals, approval for sensitive actions, and SQLite audit records.
 
-**Status: working mock-tool gateway with offline-tested OpenAI and Gemini agent clients.** The console, HTTP replay client, approval lifecycle, and synthetic evaluation work. Live provider verification, vector RAG, OPA integration, and target-machine Docker verification remain pending. This is a local research prototype, not a production security product.
+**Status: working mock-tool gateway with offline-tested OpenAI and Gemini agent clients.** The console, HTTP replay client, and approval lifecycle work. Live provider verification, vector RAG, OPA integration, and target-machine Docker verification remain pending. This is a local research prototype, not a production security product.
 
 ## Start on Windows (PowerShell)
 
@@ -42,22 +42,20 @@ Remove-Item Env:AGENTFENCE_TOKEN
 
 The application containers have memory limits of 512 MB and 128 MB respectively; these limits exclude Docker Desktop/WSL overhead and are not measured usage claims. No local LLM is loaded. Docker execution still needs verification on the target Windows laptop.
 
-## Tests and reproducible evaluation
+## Functional tests
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest
 .\.venv\Scripts\python.exe scripts/smoke.py
-.\.venv\Scripts\python.exe -m evaluation.run --repetitions 20 --output evaluation/results-local.json
 ```
 
-The committed evaluation uses 14 original synthetic proposal fixtures, repeated 20 times. It includes a known false positive. These are not official InjecAgent/AgentDojo benchmark runs, nor measurements of an LLM being successfully manipulated.
+Current-semester scope covers three objectives: the tool-execution gateway, validation and permissions, and approval with audit logging. Functional tests verify these features. Formal security and performance evaluation is deferred to next semester and is not included in this version.
 
 ## Project documentation
 
-- [Exact PPT objectives and evidence mapping](docs/OBJECTIVES.md)
+- [Current-semester objectives and evidence mapping](docs/OBJECTIVES.md)
 - [Architecture and trust boundaries](docs/ARCHITECTURE.md)
 - [Demonstration and Windows isolation checks](docs/DEMO.md)
-- [Evaluation definitions and measured results](docs/EVALUATION.md)
 - [Viva preparation](docs/VIVA.md)
 - [Progress and remaining work](docs/STATUS.md)
 

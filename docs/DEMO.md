@@ -11,7 +11,7 @@ Follow the README. Keep credentials private. Use the synthetic tenant-a/case-1 o
 3. **1:30–2:15, deterministic controls:** Submit parameter smuggling, then cross-tenant access. Show `schema_invalid` and `scope_mismatch`. The unwanted operations do not execute.
 4. **2:15–2:50, untrusted content:** Read the poisoned document. The gateway withholds suspicious output and records `output_quarantined`. Explain this is a heuristic with blind spots.
 5. **2:50–4:00, human approval:** Connect as responder, submit disable-key. Show pending and the exact typed arguments. Connect as reviewer, inspect the bound request, approve, then show executed and its reviewed/outcome events. Repeat with a new request and reject it.
-6. **4:00–5:00, evaluation and limits:** Present the synthetic sample counts, attack block rate, false positives and latency. Explain the quoted training example false positive, absence of live model evidence, and pending wider evaluation.
+6. **4:00–5:00, evidence and limits:** Inspect the request and audit records for the allowed read, rejected calls and reviewed action. Map these examples to the three current objectives. Explain that tools are simulated, heuristics have blind spots, and host administrators can modify the database. Formal evaluation is deferred to next semester.
 
 The replay client is scripted. Do not call it an LLM agent during the demonstration. The same HTTP contract is intended for the next live agent integration.
 

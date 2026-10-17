@@ -59,7 +59,6 @@ Host administrators, reviewer credential compromise, malicious gateway code, SQL
 - `store.py`: SQLite schema and seeded synthetic resources.
 - `app.py`: authenticated HTTP API, protocol limits and local UI delivery.
 - `tests/`: control behavior and failure-mode tests.
-- `evaluation/`: offline baseline and synthetic replay harness, excluded from runtime image.
 
 ## Remote model client
 
