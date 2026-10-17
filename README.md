@@ -4,7 +4,24 @@
 
 AgentFence checks structured tool requests before execution using typed validation, role and task permissions, scope checks, heuristic risk signals, approval for sensitive actions, and SQLite audit records.
 
-**Status: working mock-tool gateway with offline-tested OpenAI and Gemini agent clients.** The console, HTTP replay client, and approval lifecycle work. Live provider verification, vector RAG, OPA integration, and target-machine Docker verification remain pending. This is a local research prototype, not a production security product.
+**Status: working mock-tool gateway with live Gemini CLI demonstrations and a new password-based web workspace.** The owner verified allowed reads, blocked resource access, approval/execution and rejection on Windows Docker. The new web workflow is covered by offline integration tests and awaits its first target-machine run. This is a local research prototype, not a production security product.
+
+## Recommended: chat and approvals workspace
+
+For an existing Windows checkout with gateway credentials already configured:
+
+```powershell
+git pull --ff-only
+py -3.9 scripts/setup_ui.py
+docker compose --profile ui up --build -d portal
+```
+
+Choose your local account passwords and enter the Gemini key once during setup.
+Open **http://127.0.0.1:8001** to sign in, type prompts and review actions. Tokens are
+handled by the backend. Later, start Docker Desktop and run
+`docker compose --profile ui up -d portal`; no per-prompt terminal commands are needed.
+See [web setup, demonstration and trust boundaries](docs/WEB_UI.md).
+
 
 ## Start on Windows (PowerShell)
 
@@ -40,7 +57,7 @@ docker compose --profile demo run --rm demo-agent
 Remove-Item Env:AGENTFENCE_TOKEN
 ```
 
-The application containers have memory limits of 512 MB and 128 MB respectively; these limits exclude Docker Desktop/WSL overhead and are not measured usage claims. No local LLM is loaded. Docker execution still needs verification on the target Windows laptop.
+The application containers have memory limits of 512 MB and 128 MB respectively; these limits exclude Docker Desktop/WSL overhead and are not measured usage claims. No local LLM is loaded. Gateway and CLI agent execution have been demonstrated on the target Windows laptop; the new web services and isolation checks still need target-machine verification.
 
 ## Functional tests
 
@@ -73,5 +90,5 @@ performed. Run `python -m pytest` for offline integration coverage.
 Follow the [Windows Gemini setup guide](docs/GEMINI.md). Start on a free-tier project;
 configure your key locally and choose a model available to your account. The isolated
 `gemini-agent` profile uses the same gateway-only execution and approval pause as the
-OpenAI client. Provider access has been tested with simulated responses; live Gemini
-verification is pending.
+OpenAI client. Live Gemini CLI workflows have been demonstrated on Windows. The new browser workflow
+uses the same agent loop and requires its first target-machine run.

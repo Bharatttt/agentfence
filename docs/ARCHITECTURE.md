@@ -77,3 +77,7 @@ join `host-access`. This grants outbound networking to the trusted gateway; do n
 claim it is network-isolated from the internet. Tool destination policy, task/role
 checks and protected-volume isolation continue to enforce the execution boundary.
 The gateway has no arbitrary URL-fetch or forwarding endpoint.
+
+## Password-based web workspace
+
+The optional `ui` profile adds a trusted portal (loopback port 8001) and a separate model runner with no published port. The portal holds role credentials and delegates only analyst/responder credentials to the runner. Reviewer credentials stay in the portal. The runner has no protected database, tool implementation or portal-config mount. Browser role selection always requires the corresponding password. See [WEB_UI.md](WEB_UI.md) for session, CSRF and trust boundaries.

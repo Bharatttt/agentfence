@@ -140,3 +140,9 @@ docker compose --profile gemini run --rm gemini-agent --prompt "Read metadata fo
 Keep the same PowerShell session to preserve local credentials and model selection.
 `docker compose run` does not accept `--no-build` on the owner's installed version;
 omit that option. These diagnostic runs use only synthetic data.
+
+### Successful CLI demonstration and browser workspace
+
+On 2026-10-17, the owner demonstrated the complete live Gemini CLI workflow with `gemini-3.5-flash-lite`: an authorized read executed, out-of-scope access was denied, a sensitive request paused and executed after review, and another was rejected. The earlier 503 is no longer blocking these observed runs; its underlying cause was not established.
+
+For chat without per-prompt PowerShell commands or copied role tokens, use the new [web workspace](WEB_UI.md). Its first Windows deployment remains to be verified.

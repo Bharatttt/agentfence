@@ -14,7 +14,7 @@ Scope revision authorized by the project owner on 2026-10-17: retain the first t
 
 | Objective | Implementation | Verification and demonstration | Remaining evidence |
 | --- | --- | --- | --- |
-| 1 | `app.py` authenticated gateway; `gateway.py` private mock tool dispatcher; separate `demo/replay.py` HTTP client | `test_authorization_and_no_direct_route`; read asset in console | Live LLM integration and Docker isolation verification on target Windows machine |
+| 1 | `app.py` authenticated gateway; `gateway.py` private mock tool dispatcher; separate `demo/replay.py` HTTP client | `test_authorization_and_no_direct_route`; read asset in console | Live Gemini CLI demonstrated; new web UI and Docker isolation verification remain on target Windows machine |
 | 2 | Strict Pydantic models, role allowlists, assigned immutable task scope, tenant/case and resource ownership checks, destination allowlist | Strict argument, cross-scope, task-assignment, identity-forgery, and destination tests; console attack presets | Target-machine verification of configured permission rules |
 | 3 | Transactional SQLite approvals and mock changes; exact-request digest, expiry, single consumption, policy recheck; evidence fingerprints | Pause, approve, reject, expiry, replay, concurrency, restart, and storage-failure tests; reviewer console | External tool failure semantics, stronger log integrity, fuller review context design |
 
@@ -28,3 +28,7 @@ Scope revision authorized by the project owner on 2026-10-17: retain the first t
 - Some synopsis literature-table references appear to be domain placeholders or mismatched with their stated contributions. Bibliographic correction and independent novelty validation are pending. The implementation does not rely on those novelty claims.
 
 The contribution remains per-tool-call enforcement. Adaptive attack generation and comparing unrelated prompt guardrails are not this project's primary deliverable.
+
+## Browser workflow
+
+The optional password-based portal adds a chat interface and separate reviewer view for these same three objectives. See [WEB_UI.md](WEB_UI.md) for account setup, tested permission boundaries and current live evidence. The gateway remains responsible for tool execution and exact-action approval.

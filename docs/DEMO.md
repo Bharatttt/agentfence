@@ -1,5 +1,7 @@
 # Five-minute demonstration
 
+For the simpler chat-and-login demonstration, follow [WEB_UI.md](WEB_UI.md). The technical-console steps below remain available.
+
 ## Before the review
 
 Follow the README. Keep credentials private. Use the synthetic tenant-a/case-1 only. A fresh native database starts with key-1 active; after approval it remains disabled. Do not reset a database without retaining any needed evidence. For repeat demos, create a fresh dedicated `AGENTFENCE_DB` path rather than deleting an existing database.

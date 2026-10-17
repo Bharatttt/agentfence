@@ -87,12 +87,61 @@ services:
     security_opt: ["no-new-privileges:true"]
     mem_limit: 192m
     cpus: 0.5
+  portal:
+    profiles: ["ui"]
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      target: portal
+    ports: ["127.0.0.1:8001:8001"]
+    environment:
+      AGENTFENCE_URL: http://gateway:8000
+      RUNNER_URL: http://chat-runner:8002
+    secrets: [portal-config]
+    depends_on:
+      gateway:
+        condition: service_healthy
+      chat-runner:
+        condition: service_healthy
+    networks: [gateway-only, portal-runner, host-access]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 192m
+    cpus: 0.5
+  chat-runner:
+    profiles: ["ui"]
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      target: runner
+    environment:
+      AGENTFENCE_URL: http://gateway:8000
+    secrets: [runner-config]
+    networks: [gateway-only, portal-runner, model-egress]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 256m
+    cpus: 0.5
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 secrets:
+  portal-config:
+    file: ./runtime/portal-config.json
+  runner-config:
+    file: ./runtime/runner-config.json
   token-hashes:
     file: ./runtime/token-hashes.json
 volumes:
   gateway-state:
 networks:
+  portal-runner:
+    internal: true
   host-access: {}
   model-egress: {}
   gateway-only:
