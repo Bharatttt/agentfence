@@ -20,20 +20,29 @@ The repository includes a FastAPI gateway, a browser workspace, and bounded Gemi
 ## Architecture
 
 ```mermaid
+---
+config:
+  flowchart:
+    htmlLabels: false
+    nodeSpacing: 40
+    rankSpacing: 55
+  themeVariables:
+    fontFamily: Arial
+---
 flowchart TD
-    U["Analyst or responder"] --> P["Web portal"]
+    U["Analyst / responder"] --> P["Web portal"]
     H["Reviewer"] --> P
-    P -->|"Run task"| R["Chat runner"]
-    R <-->|"Model requests"| M["Gemini API"]
-    R -->|"Tool proposal"| G["AgentFence gateway"]
-    P -->|"Review and activity"| G
-    C["Gemini or OpenAI CLI"] -->|"Tool proposal"| G
-    G --> V["Schema and policy checks"]
+    P --> R["Chat runner"]
+    R <--> M["Gemini API"]
+    R --> G["Gateway"]
+    P -->|"Review / activity"| G
+    C["Gemini / OpenAI CLI"] --> G
+    G --> V["Schema / policy"]
     V -->|"Allow"| T["Simulated tools"]
-    V -->|"Require approval"| A["Pending request"]
-    A -->|"Approved and revalidated"| T
-    V -->|"Deny"| D["Denied request"]
-    T --> S["SQLite state and audit"]
+    V -->|"Approval needed"| A["Pending review"]
+    A -->|"Approve + recheck"| T
+    V -->|"Deny"| D["Denied"]
+    T --> S["SQLite audit / state"]
     A --> S
     D --> S
 ```
@@ -212,3 +221,16 @@ AgentFence is a local security gateway implementation with simulated tools. It d
 - Model-enabled containers have outbound connectivity; the Compose configuration does not enforce destination-level egress filtering.
 - The local portal uses password sessions without MFA, an external identity provider, or distributed session storage. Keep the default loopback bindings; remote deployment requires additional hardening.
 - Keep `runtime/`, credentials, and provider keys private. Runtime files are excluded from Git and Docker build contexts.
+
+## Future scope and enhancements
+
+The following are proposed directions for future development, not capabilities available in the current implementation.
+
+- **Real tool integrations:** Add adapters for cloud IAM, incident-response systems, and MCP tools, with explicit resource scopes, dry-run support, and narrowly scoped service credentials.
+- **Configurable policies:** Introduce versioned policy configuration, policy validation, and regression checks so teams can manage authorization rules without changing gateway code.
+- **Enterprise identity:** Integrate an external identity provider with SSO, MFA, short-lived credentials, and centralized session management.
+- **Stronger isolation:** Enforce destination-level outbound network restrictions and isolate tool adapters to reduce the impact of a compromised model runner or integration.
+- **Durable approval workflows:** Support notifications, configurable expiry, multiple reviewers for high-risk operations, and safe resumption of agent runs after approval while preserving request binding and replay protection.
+- **Audit integrity and observability:** Add tamper-evident audit records, external log export, metrics, and tracing for decision latency, denials, approval turnaround, and execution failures.
+- **Broader security evaluation:** Expand adversarial and concurrency tests, measure false positives and gateway overhead, and evaluate layered input and output screening against documented attack scenarios.
+- **Deployment scalability:** Evaluate PostgreSQL, shared session storage, and multiple gateway workers with consistent approval and execution semantics.
