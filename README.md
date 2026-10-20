@@ -20,32 +20,27 @@ The repository includes a FastAPI gateway, a browser workspace, and bounded Gemi
 ## Architecture
 
 ```mermaid
----
-config:
-  flowchart:
-    htmlLabels: false
-    nodeSpacing: 40
-    rankSpacing: 55
-  themeVariables:
-    fontFamily: Arial
----
 flowchart TD
-    U["Analyst / responder"] --> P["Web portal"]
+    U["Analyst"] --> P["Web portal"]
+    B["Responder"] --> P
     H["Reviewer"] --> P
     P --> R["Chat runner"]
     R <--> M["Gemini API"]
     R --> G["Gateway"]
-    P -->|"Review / activity"| G
-    C["Gemini / OpenAI CLI"] --> G
-    G --> V["Schema / policy"]
-    V -->|"Allow"| T["Simulated tools"]
-    V -->|"Approval needed"| A["Pending review"]
-    A -->|"Approve + recheck"| T
-    V -->|"Deny"| D["Denied"]
-    T --> S["SQLite audit / state"]
+    P -->|"Review"| G
+    C["CLI clients"] --> G
+    G --> V["Validation"]
+    V --> K["Policy checks"]
+    K -->|"Allow"| T["Tool execution"]
+    K -->|"Approval"| A["Pending review"]
+    A -->|"Revalidate"| T
+    K -->|"Deny"| D["Denied"]
+    T --> S["SQLite store"]
     A --> S
     D --> S
 ```
+
+CLI clients support Gemini and OpenAI. Validation checks tool schemas; policy checks enforce identity, task, and resource scope. The SQLite store holds application state and audit records. Approved requests are revalidated before tool execution.
 
 The model proposes actions; the gateway owns authorization and execution. The portal selects credentials from the authenticated session. The chat runner receives the current analyst or responder credential, never the reviewer credential, and has no gateway database mount.
 
